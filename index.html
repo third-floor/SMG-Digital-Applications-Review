@@ -168,6 +168,35 @@
                     <div id="darwin-container" class="grid grid-cols-1 gap-2">
                     <div class="animate-pulse text-gray-400 text-xs">Loading matches...</div>
                 </div>
+
+                <div class="mb-16">
+                <div class="border-l-4 border-red-600 pl-6 mb-6">
+                    <h3 class="text-2xl font-bold mb-3">E) Wikidata Link Accuracy Check</h3>
+                    <p class="text-gray-700 mb-4">
+                        Using a pipeline with <strong>Google Gemini</strong>, we assessed the accuracy of Wikidata identifiers associated with people and companies in the Mimsy dataset. The evaluation identified 222 wrong links, nearly half of which were caused by the non-existence of a relevant Wikidata page.
+                    </p>
+                    <div class="bg-red-50 p-4 rounded-lg text-sm italic text-red-900">
+                        <strong>Future Work:</strong> Creating new Wikidata/Wikipedia pages for missing entities and using local LLMs for future matching tasks.
+                    </div>
+                </div>
+                <div id="wikidata-errors-container" class="json-grid">
+                    <div class="animate-pulse text-gray-400">Evaluating links...</div>
+                </div>
+            </div>
+
+            <div class="mb-16">
+                <div class="border-l-4 border-teal-600 pl-6 mb-6">
+                    <h3 class="text-2xl font-bold mb-3">F) Duplicate Entry Identification</h3>
+                    <p class="text-gray-700 mb-4">
+                        A digital application was created to identify potential duplicate entries within Collections Online records. By combining fuzzy matching with LLM-based evaluation, we identified 665 pairs of entries with a very high likelihood of being duplicates.
+                    </p>
+                    <div class="bg-teal-50 p-4 rounded-lg text-sm italic text-teal-900">
+                        <strong>Future Work:</strong> Extending the duplicate identification logic to individual-level records across the full collection.
+                    </div>
+                </div>
+                <div id="co-duplicates-container" class="json-grid">
+                    <div class="animate-pulse text-gray-400">Searching for duplicates...</div>
+                </div>
             </div>
         </section>
 
@@ -255,7 +284,61 @@
             loadPlaces();
             loadPeopleData('rs_people_matches.json', 'rs-fellows-container');
             loadPeopleData('darwin_people_matches.json', 'darwin-container');
-        };
+        }
+            
+        /**
+         * Specialized rendering for LLM-evaluation datasets (Sections E and F)
+         */
+        async function loadLLMEvals(fileName, containerId, type) {
+            try {
+                const data = await fetchCleanJson(fileName);
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+
+                data.slice(0, 4).forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'data-card text-xs border-l-2 ' + 
+                                    (type === 'error' ? 'border-red-400' : 'border-teal-400');
+                
+                    let content = '';
+                    if (type === 'error') {
+                        // Formatting for Wikidata Errors
+                        content = `
+                            <p class="font-bold text-red-800 text-sm">${item['summary.title'] || 'Unknown Entity'}</p>
+                            <p class="text-gray-500 mb-1">ID: ${item['cp_number'] || 'N/A'}</p>
+                            <p class="text-gray-600 italic line-clamp-3 mb-2">"${item['Response_Text'].split('\n').pop()}"</p>
+                            <span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase">
+                                ${item['LINKAGE_NOTE_OR_CORRECT_LINK'] || 'Mismatch Identified'}
+                            </span>
+                        `;
+                    } else {
+                        // Formatting for Duplicates
+                        content = `
+                            <p class="font-bold text-teal-800 text-sm">${item['summary.title']}</p>
+                            <p class="text-gray-500 mb-1">Matched with: ${item['ap.summary.title']}</p>
+                            <p class="text-gray-600 line-clamp-3 italic">"${item['Response_Text'].split('\n')[0]} - ${item['Response_Text'].split('\n').pop()}"</p>
+                        `;
+                    }
+                
+                    card.innerHTML = content;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error(`Error loading ${fileName}:`, error);
+                document.getElementById(containerId).innerHTML = `<p class="text-red-400 text-xs italic">Evaluation data unavailable.</p>`;
+            }
+        }
+
+    // Update your initialization section
+    window.onload = function() {
+        loadPlaces();
+        loadPeopleData('rs_people_matches.json', 'rs-fellows-container');
+        loadPeopleData('darwin_people_matches.json', 'darwin-container');
+        
+        // New calls for E and F
+        loadLLMEvals('wikidata_errors.json', 'wikidata-errors-container', 'error');
+        loadLLMEvals('co_people_matches.json', 'co-duplicates-container', 'duplicate');
+    };
     </script>
 </body>
 </html>
