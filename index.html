@@ -108,7 +108,7 @@
             <div class="border-l-4 border-blue-600 pl-6 mb-8">
                 <h2 class="text-3xl font-bold mb-4">E) Railway posters locations information</h2>
                 <p class="text-lg text-gray-700 mb-6">
-                    Mentions of advertised travel destinations were extracted from metadata related to a sub-set of railway posters. The extracted information was then visualised on a map.
+                    Used a Gemini model to identify, extract, and reformat mentioned locations of advertised travel destinations in the metadata (title and descriptions) related to the railway posters sub-collection of the museum. The extracted information was then visualised on a map using Felt.
                 </p>
                 <div class="bg-blue-50 p-4 rounded-lg mb-8">
                     <h4 class="font-bold text-blue-800 mb-2">Future Work:</h4>
@@ -154,6 +154,7 @@
                     <p class="text-gray-700 mb-4">
                         Identified 967 matches across Collections Online and the RS Past Fellows dataset. 
                         This revealed 107 entries with mismatched or missing birth/death dates and enabled the addition of approximately 700 identifiers to Wikidata.
+                        During the process we also tested whether Gemini can evaluate the likeliness of two entries referring to the same person when full information (e.g. date of birth) was missing from one (or both) entries.
                     </p>
                 </div>
                 <div id="rs-fellows-container" class="json-grid">
@@ -165,7 +166,7 @@
                 <div class="bg-gray-100 p-6 rounded-xl">
                     <h3 class="font-bold text-xl mb-3 text-gray-800">C) Whipple Collections</h3>
                     <p class="text-sm text-gray-600">
-                        While an export was provided, the lack of authority files within the dataset necessitates a large deduplication task before digital work can proceed.
+                        While an export of this dataset was provided, the lack of authority files within the dataset necessitates a large deduplication task before digital work can proceed.
                     </p>
                 </div>
             
@@ -182,7 +183,7 @@
                 <div class="border-l-4 border-red-600 pl-6 mb-6">
                     <h3 class="text-2xl font-bold mb-3">E) Wikidata Link Accuracy Check</h3>
                     <p class="text-gray-700 mb-4">
-                        Using a pipeline with <strong>Google Gemini</strong>, we assessed the accuracy of Wikidata identifiers associated with people and companies in the Mimsy dataset. The evaluation identified 222 wrong links, nearly half of which were caused by the non-existence of a relevant Wikidata page.
+                        Using a pipeline with <strong>Google Gemini</strong>, we used AI-enhanced evaluation of information to find incorrect Wikidata identifiers associated with people and companies in the Mimsy dataset. The evaluation identified 222 wrong links, nearly half of which were caused by the non-existence of a relevant Wikidata page.
                     </p>
                     <div class="bg-red-50 p-4 rounded-lg text-sm italic text-red-900">
                         <strong>Future Work:</strong> Creating new Wikidata/Wikipedia pages for missing entities and using local LLMs for future matching tasks.
@@ -197,7 +198,7 @@
                 <div class="border-l-4 border-teal-600 pl-6 mb-6">
                     <h3 class="text-2xl font-bold mb-3">F) Duplicate Entry Identification</h3>
                     <p class="text-gray-700 mb-4">
-                        A digital application was created to identify potential duplicate entries within Collections Online records. By combining fuzzy matching with LLM-based evaluation, we identified 665 pairs of entries with a very high likelihood of being duplicates.
+                        Based on the AI enhanced evaluation pipeline deployed for finding matching entries across datasets (The Royal Society Past Fellows, Darwin Correspondence Project, Wikidata), a digital approach was created to identify potential duplicate entries within Collections Online records. By combining fuzzy matching with LLM-based evaluation, we identified 665 pairs of entries with a very high likelihood of being duplicates.
                     </p>
                     <div class="bg-teal-50 p-4 rounded-lg text-sm italic text-teal-900">
                         <strong>Future Work:</strong> Extending the duplicate identification logic to individual-level records across the full collection.
