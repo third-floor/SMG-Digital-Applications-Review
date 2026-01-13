@@ -521,8 +521,8 @@
                 card.className = 'data-card text-sm border-l-2 border-rose-400 bg-white flex flex-col justify-between';
                 
                 // Mapping fields based on the provided daily_herald.json structure
-                const uid = item['@admin.uid'] || 'Unknown ID';
-                const transcription = item['back_transcription'] || 'No transcription generated.';
+                const uid = item['uid'] || 'Unknown ID';
+                const transcription = item['output - gemini-2.5-flash-preview-05-20'] || 'No transcription generated.';
                 
                 card.innerHTML = `
                     <div>
