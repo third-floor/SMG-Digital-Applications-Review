@@ -200,6 +200,43 @@
             </div>
         </section>
 
+        <hr class="border-gray-200">
+
+        <section id="section-3" class="pb-20">
+            <h2 class="text-4xl font-bold mb-12 text-indigo-900">3. SMG Journal Analysis</h2>
+
+            <div class="mb-16">
+                <div class="border-l-4 border-amber-600 pl-6 mb-8">
+                    <h3 class="text-2xl font-bold mb-4">A) Identifying Objects with References</h3>
+                    <p class="text-lg text-gray-700 mb-6">
+                        Several LLM models were tested for identifying objects referred to in the Science Museum Group Journal (SMGJ). 
+                        Key challenges included distinguishing museum collection objects from figurative references and managing inconsistent referencing standards in existing texts and images.
+                    </p>
+                    <div class="bg-amber-50 p-5 rounded-lg border border-amber-100">
+                        <h4 class="font-bold text-amber-800 mb-2">Technical Obstacles & Outcomes:</h4>
+                        <p class="text-amber-900 text-sm leading-relaxed italic">
+                            Initial tests with Gemini resulted in two specialized lists: one for all collection-specific objects identified in texts, and another linking identified objects with their quoted reference numbers.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mt-10">
+                    <div>
+                        <h4 class="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-4">Object Mentions: smgj_mentions.json</h4>
+                        <div id="smgj-mentions-container" class="space-y-3">
+                            <div class="animate-pulse text-gray-400 text-xs">Parsing article mentions...</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-4">Sentence Extraction: smgj_sentences.json</h4>
+                        <div id="smgj-sentences-container" class="space-y-3">
+                            <div class="animate-pulse text-gray-400 text-xs">Parsing sentences...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <script>
@@ -322,16 +359,62 @@
             }
         }
 
-    // Update your initialization section
-    window.onload = function() {
-        loadPlaces();
-        loadPeopleData('rs_people_matches.json', 'rs-fellows-container');
-        loadPeopleData('darwin_people_matches.json', 'darwin-container');
-        
-        // New calls for E and F
-        loadLLMEvals('wikidata_errors.json', 'wikidata-errors-container', 'error');
-        loadLLMEvals('co_people_matches.json', 'co-duplicates-container', 'duplicate');
-    };
+        /**
+         * Specialized rendering for SMGJ Journal Analysis (Section 3)
+         */
+        async function loadSMGJData() {
+            try {
+                // Load Mentions
+                const mentionsData = await fetchCleanJson('smgj_mentions.json');
+                const mentionsContainer = document.getElementById('smgj-mentions-container');
+                mentionsContainer.innerHTML = '';
+    
+                mentionsData.slice(0, 3).forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'data-card text-xs border-l-2 border-amber-400 bg-white';
+                    card.innerHTML = `
+                        <p class="font-bold text-amber-800 text-sm">${item['Object identified'] || 'Unspecified Object'}</p>
+                        <p class="text-gray-500 mb-2 font-medium">Article: ${item['Article short name']}</p>
+                        <p class="text-gray-600 italic line-clamp-3 bg-gray-50 p-2 rounded">
+                            ${item['Relevant (part of sentence) where it is mentioned'] || 'Context unavailable.'}
+                        </p>
+                    `;
+                    mentionsContainer.appendChild(card);
+                });
+
+                // Load Sentences
+                const sentencesData = await fetchCleanJson('smgj_sentences.json');
+                const sentencesContainer = document.getElementById('smgj-sentences-container');
+                sentencesContainer.innerHTML = '';
+
+                sentencesData.slice(0, 3).forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'data-card text-xs border-l-2 border-gray-300 bg-white';
+                    card.innerHTML = `
+                        <p class="font-bold text-gray-700 text-sm mb-1">${item['Author_Title'] || 'Untitled Article'}</p>
+                        <p class="text-gray-500 line-clamp-4 leading-relaxed">${item['Sentence'] || 'Sentence data missing.'}</p>
+                    `;
+                    sentencesContainer.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Error loading SMGJ data:', error);
+                const errorMsg = `<p class="text-red-400 text-xs italic">Journal data sample unavailable.</p>`;
+                document.getElementById('smgj-mentions-container').innerHTML = errorMsg;
+                document.getElementById('smgj-sentences-container').innerHTML = errorMsg;
+            }
+        }
+
+        //combined window.onload function
+        window.onload = function() {
+            loadPlaces();
+            loadPeopleData('rs_people_matches.json', 'rs-fellows-container');
+            loadPeopleData('darwin_people_matches.json', 'darwin-container');
+            loadLLMEvals('wikidata_errors.json', 'wikidata-errors-container', 'error');
+            loadLLMEvals('co_people_matches.json', 'co-duplicates-container', 'duplicate');
+            loadSMGJData();
+        };
+
     </script>
 </body>
 </html>
