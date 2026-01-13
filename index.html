@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Experiments Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .json-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+        .data-card { background: #f9fafb; border: 1px solid #e5e7eb; padding: 1rem; border-radius: 0.5rem; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans leading-normal">
+
+    <header class="bg-indigo-900 text-white py-16 px-6 text-center">
+        <h1 class="text-4xl font-bold mb-4">Digital Experiments: Collections & Geospatial Analysis</h1>
+        <p class="text-xl text-indigo-200">A modular record of data linking, mapping, and analytics experiments.</p>
+    </header>
+
+    <main class="max-w-5xl mx-auto py-12 px-6 space-y-24">
+
+        <section id="experiment-a">
+            <div class="border-l-4 border-indigo-600 pl-6">
+                <h2 class="text-3xl font-bold mb-4">A) Adding coordinates to Places table</h2>
+                <p class="text-lg text-gray-700 mb-6">
+                    Linking Place data to Getty identifiers, which enabled the addition of longitude and latitude coordinates to the place entries. 
+                    This enables geospatial analysis of the Place table composition as well as the geospatial analysis of all objects linked to those place names.
+                </p>
+                <div class="bg-indigo-50 p-4 rounded-lg mb-6">
+                    <h4 class="font-bold text-indigo-800 mb-2">Future Work:</h4>
+                    <p class="text-indigo-900">Extending linkages to other services (NLS, UK Data Service), setting up HeritageGateway connections, and creating a search app for geocoding comparisons.</p>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-4">Dataset Sample: places.json</h3>
+                <div id="places-container" class="json-grid">
+                    <div class="animate-pulse text-gray-400">Loading dataset...</div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-gray-200">
+
+        <section id="experiment-b-c">
+            <div class="border-l-4 border-emerald-600 pl-6">
+                <h2 class="text-3xl font-bold mb-4">B & C) Mapping & Museum Counts</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    Visualising the distribution of object origins ("place made") across countries and counties.
+                </p>
+                <div class="flex flex-wrap gap-4 mt-6">
+                    <a href="https://felt.com/map/OBJECT-Table-SHARED-8gs747UFTFiPJsjkyXRxFB?share=1&loc=17.62,-9,2.81z" target="_blank" class="bg-emerald-600 text-white px-6 py-2 rounded shadow hover:bg-emerald-700 transition">View Felt Map</a>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-gray-200">
+
+        <section id="experiment-d" class="pb-20">
+            <div class="border-l-4 border-orange-600 pl-6">
+                <h2 class="text-3xl font-bold mb-4">D) Google Analytics Integration</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    Combined visitor numbers with geocoded object locations to see if individuals view objects made in their own countries.
+                </p>
+                <div class="flex flex-wrap gap-4 mt-6">
+                    <a href="https://kepler.gl/demo/map?mapUrl=https://dl.dropboxusercontent.com/scl/fi/s3prd8msuvk12y8inxubc/keplergl_rjcw33v.json?rlkey=k1q5in2my6uieff636a6lgx1h&dl=0" target="_blank" class="bg-orange-600 text-white px-6 py-2 rounded shadow hover:bg-orange-700 transition">View Kepler.gl Visualisation</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // FUNCTION TO RENDER JSON DATA
+        async function loadPlaces() {
+            try {
+                // Since it's in the same repo, we fetch locally
+                const response = await fetch('places.json');
+                const data = await response.json();
+                const container = document.getElementById('places-container');
+                container.innerHTML = ''; // Clear loader
+
+                // We only show the first 6 items to keep the page clean, 
+                // but you can adjust this or add a "Load More" button.
+                data.slice(0, 6).forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'data-card text-sm';
+                    card.innerHTML = `
+                        <p class="font-bold text-indigo-700 text-base">${item['PLACE.PLACE1']}</p>
+                        <p class="text-gray-500 italic mb-2">${item['PLACE.DESCRIPTION'] || 'No description'}</p>
+                        <div class="grid grid-cols-2 gap-1 text-xs">
+                            <span class="text-gray-400">Lat/Long:</span> <span>${item.Latitude}, ${item.Longitude}</span>
+                            <span class="text-gray-400">TGN ID:</span> <a href="${item.LINK}" target="_blank" class="text-blue-500 underline">${item.TGN_ID2}</a>
+                            <span class="text-gray-400">Broader:</span> <span>${item['PLACE.BROADER_TEXT']}</span>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading JSON:', error);
+                document.getElementById('places-container').innerHTML = '<p class="text-red-500">Error loading data. Ensure places.json is in the root folder.</p>';
+            }
+        }
+
+        // Initialize
+        loadPlaces();
+    </script>
+</body>
+</html>
