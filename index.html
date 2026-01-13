@@ -463,9 +463,9 @@
                 card.className = 'data-card text-sm border-l-2 border-slate-400 bg-white';
                 
                 // Assuming fields based on typical catalogue metadata
-                const title = item['Title'] || item['Full title'] || 'Untitled Catalogue';
-                const year = item['Year'] || item['Date'] || 'N/A';
-                const link = item['Link'] || item['URL'];
+                const title = item['Column'] || 'Untitled Catalogue';
+                const year = item['Column3'] || 'N/A';
+                const link = item['LINK'];
 
                 card.innerHTML = `
                     <p class="font-bold text-slate-800 text-base mb-1">${title}</p>
