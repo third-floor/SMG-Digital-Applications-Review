@@ -15,7 +15,6 @@
             border-radius: 0.75rem; 
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
-        /* Style for the embedded map container */
         .map-container {
             border-radius: 0.75rem;
             overflow: hidden;
@@ -37,13 +36,14 @@
             <div class="border-l-4 border-indigo-600 pl-6 mb-8">
                 <h2 class="text-3xl font-bold mb-4">A) Adding coordinates to Places table</h2>
                 <p class="text-lg text-gray-700 mb-6">
-                    Linking Place data to Getty identifiers, enabling the addition of longitude and latitude coordinates to entries. This allows for geospatial analysis of both the Place table and objects linked to those names.
+                    Linking Place data to Getty identifiers, which enabled the addition of longitude and latitude coordinates to the place entries. This enables geospatial analysis of the Place table composition as well as the geospatial analysis of all objects linked to those place names.
                 </p>
                 <div class="bg-indigo-50 p-4 rounded-lg">
                     <h4 class="font-bold text-indigo-800 mb-2">Future Work:</h4>
                     <ul class="text-indigo-900 text-sm list-disc ml-5 space-y-1">
-                        <li>Extending linkages to other services like NLS historic maps and UK Data Service.</li>
-                        <li>Creating search apps to compare geocoding services and setting up connections with HeritageGateway.</li>
+                        <li>Extending the linkages to other services (NLS historic maps, UK Data Service, etc.).</li>
+                        <li>Creating a search app that compares retrieved information from multiple geocoding services.</li>
+                        <li>Setting up connections with HeritageGateway.</li>
                     </ul>
                 </div>
             </div>
@@ -60,11 +60,11 @@
             <div class="border-l-4 border-emerald-600 pl-6 mb-8">
                 <h2 class="text-3xl font-bold mb-4">B & C) Mapping & Museum Counts</h2>
                 <p class="text-lg text-gray-700 mb-6">
-                    A map showing object locations based on the "place made" field content was created for distribution analysis. Visualizations also show the count of objects across various countries.
+                    Maps were created to show the locations of objects based on the "place made" field content, allowing for analysis of the distribution of object origins. Visualisations also show the distribution of objects across various countries.
                 </p>
                 <div class="bg-emerald-50 p-4 rounded-lg">
                     <h4 class="font-bold text-emerald-800 mb-2">Future Work:</h4>
-                    <p class="text-emerald-900 italic text-sm">Visualizing location info from other fields, gamification for exploration, and comparisons with other collections.</p>
+                    <p class="text-emerald-900 italic text-sm">Extracting and visualising location information mentioned in other fields and gamification for exploring objects through maps.</p>
                 </div>
             </div>
 
@@ -75,21 +75,44 @@
 
         <hr class="border-gray-200">
 
-        <section id="experiment-d" class="pb-20">
+        <section id="experiment-d">
             <div class="border-l-4 border-orange-600 pl-6 mb-8">
                 <h2 class="text-3xl font-bold mb-4">D) Google Analytics Integration</h2>
                 <p class="text-lg text-gray-700 mb-6">
-                    Combined visitor numbers with geocoded object locations to show whether individuals from different countries viewed objects made in their own countries or elsewhere.
+                    Combined visitor numbers with geocoded location information to show whether individuals from different countries viewed objects made in their own countries or elsewhere.
                 </p>
                 <div class="bg-orange-50 p-4 rounded-lg mb-8">
                     <h4 class="font-bold text-orange-800 mb-2">Future Work:</h4>
-                    <p class="text-orange-900 italic text-sm">Integrating real-time information and exploring other monitoring tool visualizations.</p>
+                    <p class="text-orange-900 italic text-sm">Enhancing the visualisation by integrating real-time information and exploring other monitoring tools.</p>
                 </div>
             </div>
 
             <div class="mt-6">
                 <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-4">Visualization Output: kepler.gl.png</h3>
                 <img src="kepler.gl.png" alt="Kepler.gl visualization" class="experiment-image">
+            </div>
+        </section>
+
+        <hr class="border-gray-200">
+
+        <section id="experiment-e" class="pb-20">
+            <div class="border-l-4 border-blue-600 pl-6 mb-8">
+                <h2 class="text-3xl font-bold mb-4">E) Railway posters locations information</h2>
+                <p class="text-lg text-gray-700 mb-6">
+                    Mentions of advertised travel destinations were extracted from metadata related to a sub-set of railway posters. The extracted information was then visualised on a map.
+                </p>
+                <div class="bg-blue-50 p-4 rounded-lg mb-8">
+                    <h4 class="font-bold text-blue-800 mb-2">Future Work:</h4>
+                    <ul class="text-blue-900 text-sm list-disc ml-5 space-y-1">
+                        <li>Extracting information from the full set of railway posters and visual materials.</li>
+                        <li>Identifying other sub-collections that can be similarly visualised.</li>
+                        <li>Experimenting with better approaches to visualising objects with multiple locations included within their metadata.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <iframe width="100%" height="488" frameborder="0" title="Felt Map" src="https://felt.com/embed/map/NRM-Railway-Travel-Posters-VsU3e0fJTB6ZdU69AFXaUjC?loc=53.683%2C-4.166%2C5.6z&legend=1&cooperativeGestures=1&link=1&geolocation=0&zoomControls=1&scaleBar=1" referrerpolicy="strict-origin-when-cross-origin"></iframe>
             </div>
         </section>
 
