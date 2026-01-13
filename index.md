@@ -6,10 +6,10 @@ Welcome to the documentation of digital experiments conducted during the Science
 
 ## 🌍 Module 1: Geospatial Analysis & Mapping
 
-[cite_start]**Goal:** To transform static geographic metadata into dynamic, coordinate-based information for spatial research and visualization[cite: 1, 2].
+**Goal:** To transform static geographic metadata into dynamic, coordinate-based information for spatial research and visualization.
 
 ### A) Enriching the Places Table
-[cite_start]We successfully linked internal museum "Place" data to **Getty Thesaurus of Geographic Names (TGN)** identifiers[cite: 1]. [cite_start]This enabled the addition of precise longitude and latitude coordinates to our records, facilitating deep geospatial analysis of both the collection's composition and all objects linked to those geographic entities[cite: 1, 2].
+[cite_start]We successfully linked internal museum "Place" data to **Getty Thesaurus of Geographic Names (TGN)** identifiers[cite: 1]. [cite_start]This enabled the addition of precise longitude and latitude coordinates to our records, facilitating deep geospatial analysis of both the collection's composition and all objects linked to those geographic entities[cite: 2].
 
 **Future Work:**
 * [cite_start]**Service Expansion**: Extend linkages to additional services and gazetteers[cite: 2].
@@ -30,11 +30,11 @@ Welcome to the documentation of digital experiments conducted during the Science
 [cite_start]We developed visualizations showing the distribution of objects across various countries based on their appearance in the "place made" field[cite: 9].
 
 **Future Work:**
-* [cite_start]**Local Precision**: Further geospatial analysis of objects within the UK at county and city levels[cite: 9].
+* [cite_start]**Local Precision**: Further geospatial analysis of objects within the UK at county and city levels[cite: 10].
 * [cite_start]**Benchmarking**: Compare our collection's distribution with other major museum datasets[cite: 10].
 
 ### D) Audience Insights (Google Analytics)
-[cite_start]By combining **Google Analytics** visitor numbers with geocoded location data, we visualized whether international visitors tend to view objects made in their own countries or explore items from elsewhere[cite: 11].
+[cite_start]By combining **Google Analytics** visitor numbers with geocoded location data, we visualized whether international visitors tend to view objects made in their own countries or explore items from elsewhere[cite: 10, 11].
 
 **Future Work:**
 * [cite_start]**Live Integration**: Enhance the visualization by integrating real-time visitor information[cite: 11].
@@ -49,17 +49,64 @@ Welcome to the documentation of digital experiments conducted during the Science
 
 ---
 
-### 📍 Data Sample: Reconciled Places
-*Below is a sample of the enriched data from the Places table, showing the successful link between internal names, TGN IDs, and coordinates.*
+## 👥 Module 2: People, Identity & Authority Matching
 
-| Place Name | Broader Context | TGN ID | Latitude | Longitude |
-| :--- | :--- | :--- | :--- | :--- |
-| **Dunecht** | Aberdeenshire; Scotland | 7030514 | 57.15 | -2.4 |
-| **Belgium** | World; Europe | 1000063 | 50.8333 | 4.0 |
-| **Greenwich** | London; England | 7018915 | 51.4667 | 0.0333 |
-| **Jonkoping** | Sweden | 1000396 | 57.5 | 14.5 |
-| **Pembrey** | Carmarthenshire; Wales | 7010408 | 51.6833 | -4.2667 |
+**Goal:** To reconcile museum biographical records with external authority files and leverage AI to identify internal data redundancies.
+
+### A) Global Authority Search Script
+[cite_start]As part of a review of authority file management at other GLAM (Galleries, Libraries, Archives, and Museums) institutions, a script was developed to query search terms across multiple publicly available authority files[cite: 17].
+
+**Future Work:**
+* [cite_start]**Optimization**: Make the script more robust by implementing parallel searches across different sites rather than sequential execution[cite: 18].
+* [cite_start]**Scope Expansion**: Expand searches to include catalogue items as well as authority files[cite: 19].
+* [cite_start]**Discovery**: Identify additional institutions providing public access to their authority files[cite: 20].
+
+### B) The Royal Society Connection
+[cite_start]Using the **Royal Society Past Fellows** dataset, we tested digital applications designed to identify matching entries across disparate datasets[cite: 20].
+* [cite_start]**Result**: Identified **967 entries** for people matched across Collections Online and the Royal Society[cite: 21].
+* [cite_start]**Data Correction**: Identified **107 entries** with missing or mismatched life dates (46 birth date mismatches, 17 death date mismatches, and 44 entries where both were incorrect)[cite: 22].
+* [cite_start]**Linked Data Enrichment**: Updated approximately **700 identifiers** and links on corresponding Wikidata people pages[cite: 23].
+
+**Future Work:**
+* [cite_start]**Global Links**: Establish links with additional external datasets from history of science museum collections worldwide[cite: 24].
+* [cite_start]**Wikidata Growth**: Continue adding Science Museum Group (SMG) identifiers to Wikidata[cite: 25].
+
+### C) Whipple Museum Dataset Insights
+[cite_start]We collaborated with the **Whipple Museum of the History of Science** to replicate matching workflows[cite: 25]. [cite_start]While the dataset currently lacks authority files—precluding digital matching until a deduplication task is completed—it remains a valuable asset for future testing[cite: 26, 27].
+
+### D) The Darwin Correspondence Project
+[cite_start]A dataset of authority entries from the **Darwin Correspondence Project** was used to further test automated matching[cite: 28, 29].
+* [cite_start]**Result**: Successfully identified approximately **600 matching pairs** across the two datasets[cite: 30].
+
+### E) Wikidata Accuracy & LLM Verification
+[cite_start]We evaluated the accuracy of Wikidata identifiers added via the Heritage Connector project[cite: 31, 32]. [cite_start]Using a pipeline incorporating **Google Gemini**, we retrieved data from both Collections Online and Wikidata to verify if they referred to the same individual[cite: 33].
+* [cite_start]**Findings**: Identified **222 incorrect Wikidata links**[cite: 34].
+* [cite_start]**Missing Links**: Approximately 100 of these errors occurred because no relevant Wikidata page currently exists for the entity[cite: 35].
+
+**Future Work:**
+* [cite_start]**Content Creation**: Proactively create Wikidata/Wikipedia pages for missing entities[cite: 35].
+* [cite_start]**Local LLMs**: Utilize local Large Language Models to match Mimsy authorities to Wikidata[cite: 36].
+
+### F) Internal Duplicate Identification
+[cite_start]Using an enhanced LLM-based approach, we identified potential duplicate entries within our own people and company records[cite: 36, 37]. [cite_start]By fuzzy matching names and filtering for life-date discrepancies, **665 pairs** of high-likelihood duplicates were identified[cite: 37, 38, 39].
+
+### G) Research & PhD Placement
+[cite_start]A PhD placement student aided exploration of these records from August to October[cite: 39].
+* [cite_start]**Outputs**: Analysis of date presence in descriptive fields, spatial analysis of people records, and a comparative study of "items on display" versus "items in store"[cite: 40].
 
 ---
 
-**[Note: To add the next module, simply append the next block of text and data below this line.]**
+### ✅ Data Sample: Reconciled Identities
+*Examples of successful matches across the Royal Society (RS), Darwin (DCP), and internal (CO) datasets.*
+
+| Name | Match Source | Match Strength | Lifespan (Verified) |
+| :--- | :--- | :--- | :--- |
+| **Stephen William Hawking** | Royal Society | High | 1942 - 2018 |
+| **Margaret Hilda Thatcher** | Royal Society | High | 1925 - 2013 |
+| **Charles Robert Darwin** | Darwin Project | High | 1809 - 1882 |
+| **Sir Godfrey Newbold Hounsfield** | Royal Society | High | 1919 - 2004 |
+| **Adam Sedgwick** | Internal | Fuzzy | 1785 - 1873 |
+
+---
+
+**Next Module:** Ready for the next set! Upload the text and data for **Historical Catalogues** or **Visual Analysis**, and I will add them to the script.
