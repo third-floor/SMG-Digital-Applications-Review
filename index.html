@@ -168,6 +168,7 @@
                     <div id="darwin-container" class="grid grid-cols-1 gap-2">
                     <div class="animate-pulse text-gray-400 text-xs">Loading matches...</div>
                 </div>
+            </div>
 
             <div class="mb-16">
                 <div class="border-l-4 border-red-600 pl-6 mb-6">
@@ -277,13 +278,6 @@
                 console.error(`Error loading ${fileName}:`, error);
                 document.getElementById(containerId).innerHTML = `<p class="text-red-400 text-xs italic">Data sample currently unavailable.</p>`;
             }
-        }
-
-        // Initialize all modular blocks on page load
-        window.onload = function() {
-            loadPlaces();
-            loadPeopleData('rs_people_matches.json', 'rs-fellows-container');
-            loadPeopleData('darwin_people_matches.json', 'darwin-container');
         }
             
         /**
