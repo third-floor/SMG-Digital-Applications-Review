@@ -116,53 +116,145 @@
             </div>
         </section>
 
+        <hr class="border-gray-200">
+
+        <section id="section-2" class="pb-20">
+            <h2 class="text-4xl font-bold mb-12 text-indigo-900">2. Authority Files & Data Linking</h2>
+
+            <div class="mb-16">
+                <div class="border-l-4 border-purple-600 pl-6 mb-6">
+                    <h3 class="text-2xl font-bold mb-3">A) Search Across External Collections</h3>
+                    <p class="text-gray-700 mb-4">
+                        A script was written to query search terms across publicly available authority files of other GLAM institutions to review different institutional approaches.
+                    </p>
+                    <div class="bg-purple-50 p-4 rounded-lg text-sm italic text-purple-900">
+                        <strong>Future Work:</strong> Making the script robust for parallel searches and expanding it to search catalogue items beyond authority records.
+                    </div>
+                </div>
+                <a href="https://github.com/YOUR_USERNAME/YOUR_REPO/blob/main/2_A_Authority_Records_Search_Across_External_Collections.ipynb" 
+                   target="_blank" 
+                   class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded hover:bg-black transition">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.041-1.412-4.041-1.412-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    View Jupyter Notebook on GitHub
+                </a>
+            </div>
+
+            <div class="mb-16">
+                <div class="border-l-4 border-blue-600 pl-6 mb-6">
+                    <h3 class="text-2xl font-bold mb-3">B) Royal Society Past Fellows Dataset</h3>
+                    <p class="text-gray-700 mb-4">
+                        Identified 967 matches across Collections Online and the RS Past Fellows dataset. 
+                        This revealed 107 entries with mismatched or missing birth/death dates and enabled the addition of approximately 700 identifiers to Wikidata.
+                    </p>
+                </div>
+                <div id="rs-fellows-container" class="json-grid">
+                    <div class="animate-pulse text-gray-400">Loading matches...</div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-100 p-6 rounded-xl">
+                    <h3 class="font-bold text-xl mb-3 text-gray-800">C) Whipple Collections</h3>
+                    <p class="text-sm text-gray-600">
+                        While an export was provided, the lack of authority files within the dataset necessitates a large deduplication task before digital work can proceed.
+                    </p>
+                </div>
+                <div class="bg-indigo-100 p-6 rounded-xl">
+                    <h3 class="font-bold text-xl mb-3 text-indigo-900">D) Darwin Correspondence Project</h3>
+                    <p class="text-sm text-indigo-800 mb-4">
+                        Authority entries generated from the project's online dataset resulted in roughly 600 pairs of matched entries across datasets.
+                    </p>
+                    <div id="darwin-container" class="space-y-2">
+                        </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <script>
-        async function loadPlaces() {
-    try {
-        const response = await fetch('places.json');
+        /**
+         * Helper to fetch and clean JSON data that might contain invalid 'NaN' tokens.
+         */
+        async function fetchCleanJson(fileName) {
+            const response = await fetch(fileName);
+            if (!response.ok) throw new Error(`Could not fetch ${fileName}`);
         
-        if (!response.ok) throw new Error('Network response was not ok');
-        
-        // 1. Read the file as raw text string
-        const text = await response.text();
-        
-        // 2. Globally replace the invalid NaN tokens with null
-        // This handles cases like: "PLACE.PLACE2": NaN,
-        const cleanText = text.replace(/:\s*NaN/g, ': null');
-        
-        // 3. Parse the cleaned string into a JSON object
-        const data = JSON.parse(cleanText);
-        
-        const container = document.getElementById('places-container');
-        container.innerHTML = ''; 
+            const text = await response.text();
+            // Replace invalid NaN tokens with null for standard JSON parsing
+            const cleanText = text.replace(/:\s*NaN/g, ': null');
+            return JSON.parse(cleanText);
+        }
 
-        // 4. Render the data
-        data.slice(0, 6).forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'data-card text-sm';
-            card.innerHTML = `
-                <p class="font-bold text-indigo-700 text-base">${item['PLACE.PLACE1'] || 'Unknown'}</p>
-                <p class="text-gray-500 italic mb-2">${item['PLACE.DESCRIPTION'] || 'No description available'}</p>
-                <div class="grid grid-cols-2 gap-1 text-xs">
-                    <span class="text-gray-400 font-medium">Coordinates:</span> 
-                    <span>${item.Latitude ?? 'N/A'}, ${item.Longitude ?? 'N/A'}</span>
-                    <span class="text-gray-400 font-medium">Getty ID:</span> 
-                    <a href="${item.LINK || '#'}" target="_blank" class="text-blue-500 hover:underline">
-                        ${item.TGN_ID2 || 'View Link'}
-                    </a>
-                </div>
-            `;
-            container.appendChild(card);
-        });
-    } catch (error) {
-        console.error('Final Error Catch:', error);
-        document.getElementById('places-container').innerHTML = 
-            `<p class="text-red-500">Error loading data sample: ${error.message}</p>`;
-    }
-}
-        loadPlaces();
+        /**
+         * Section 1-A: Renders the Places dataset sample.
+         */
+        async function loadPlaces() {
+            try {
+                const data = await fetchCleanJson('places.json');
+                const container = document.getElementById('places-container');
+                container.innerHTML = ''; 
+
+                data.slice(0, 6).forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'data-card text-sm';
+                    card.innerHTML = `
+                        <p class="font-bold text-indigo-700 text-base">${item['PLACE.PLACE1'] || 'Unknown'}</p>
+                        <p class="text-gray-500 italic mb-2">${item['PLACE.DESCRIPTION'] || 'No description available'}</p>
+                        <div class="grid grid-cols-2 gap-1 text-xs">
+                            <span class="text-gray-400 font-medium">Coordinates:</span> 
+                            <span>${item.Latitude ?? 'N/A'}, ${item.Longitude ?? 'N/A'}</span>
+                            <span class="text-gray-400 font-medium">Getty ID:</span> 
+                            <a href="${item.LINK || '#'}" target="_blank" class="text-blue-500 hover:underline">
+                                ${item.TGN_ID2 || 'View Link'}
+                            </a>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading places:', error);
+                document.getElementById('places-container').innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
+            }
+        }
+
+        /**
+         * Section 2: Renders samples from the People Matching datasets (RS and Darwin).
+         */
+        async function loadPeopleData(fileName, containerId) {
+            try {
+                const data = await fetchCleanJson(fileName);
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+
+                // Render the first 4 entries as a preview
+                data.slice(0, 4).forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'data-card text-xs border-l-2 border-indigo-300';
+                
+                    // Display logic for birth/death years
+                    const birth = item.InputBirth ?? '?';
+                    const death = item.InputDeath ?? '?';
+                
+                    card.innerHTML = `
+                        <p class="font-bold text-gray-800 text-sm">${item.MatchedName || item.InputName || 'Unknown Record'}</p>
+                        <p class="text-gray-500 mb-1">Dates: ${birth} - ${death}</p>
+                        <p class="text-gray-600 line-clamp-3">${item.InputDescription || item['brief bio'] || 'No description available.'}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error(`Error loading ${fileName}:`, error);
+                document.getElementById(containerId).innerHTML = `<p class="text-red-400 text-xs italic">Data sample currently unavailable.</p>`;
+            }
+        }
+
+        // Initialize all modular blocks on page load
+        window.onload = function() {
+            loadPlaces();
+            loadPeopleData('rs_people_matches.json', 'rs-fellows-container');
+            loadPeopleData('darwin_people_matches.json', 'darwin-container');
+        };
     </script>
 </body>
 </html>
