@@ -8,13 +8,19 @@
     <style>
         .json-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
         .data-card { background: #f9fafb; border: 1px solid #e5e7eb; padding: 1rem; border-radius: 0.5rem; }
-        /* Style for experiment images */
         .experiment-image { 
             width: 100%; 
             max-height: 500px; 
             object-fit: cover; 
             border-radius: 0.75rem; 
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        /* Style for the embedded map container */
+        .map-container {
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
         }
     </style>
 </head>
@@ -31,11 +37,14 @@
             <div class="border-l-4 border-indigo-600 pl-6 mb-8">
                 <h2 class="text-3xl font-bold mb-4">A) Adding coordinates to Places table</h2>
                 <p class="text-lg text-gray-700 mb-6">
-                    Linking Place data to Getty identifiers. This enables the addition of longitude and latitude coordinates to entries, allowing for geospatial analysis of the Place table and linked objects.
+                    Linking Place data to Getty identifiers, enabling the addition of longitude and latitude coordinates to entries. This allows for geospatial analysis of both the Place table and objects linked to those names.
                 </p>
                 <div class="bg-indigo-50 p-4 rounded-lg">
                     <h4 class="font-bold text-indigo-800 mb-2">Future Work:</h4>
-                    <p class="text-indigo-900 italic text-sm">Extending linkages to services like NLS and HeritageGateway; creating search apps for geocoding service comparisons.</p>
+                    <ul class="text-indigo-900 text-sm list-disc ml-5 space-y-1">
+                        <li>Extending linkages to other services like NLS historic maps and UK Data Service.</li>
+                        <li>Creating search apps to compare geocoding services and setting up connections with HeritageGateway.</li>
+                    </ul>
                 </div>
             </div>
 
@@ -48,17 +57,19 @@
         <hr class="border-gray-200">
 
         <section id="experiment-b-c">
-            <div class="border-l-4 border-emerald-600 pl-6">
+            <div class="border-l-4 border-emerald-600 pl-6 mb-8">
                 <h2 class="text-3xl font-bold mb-4">B & C) Mapping & Museum Counts</h2>
                 <p class="text-lg text-gray-700 mb-6">
-                    Mapping the "place made" field allows for the geospatial analysis of the distribution of object origins. Counts across countries were visualized based on country appearances in the data.
+                    A map showing object locations based on the "place made" field content was created for distribution analysis. Visualizations also show the count of objects across various countries.
                 </p>
-                <div class="mt-4">
-                    <a href="https://felt.com/map/OBJECT-Table-SHARED-8gs747UFTFiPJsjkyXRxFB?share=1&loc=17.62,-9,2.81z" target="_blank" class="inline-flex items-center text-emerald-700 font-semibold hover:underline">
-                        Interactive Map Output (Felt) 
-                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                    </a>
+                <div class="bg-emerald-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-emerald-800 mb-2">Future Work:</h4>
+                    <p class="text-emerald-900 italic text-sm">Visualizing location info from other fields, gamification for exploration, and comparisons with other collections.</p>
                 </div>
+            </div>
+
+            <div class="map-container">
+                <iframe width="100%" height="488" frameborder="0" title="Felt Map" src="https://felt.com/embed/map/OBJECT-Table-SHARED-8gs747UFTFiPJsjkyXRxFB?loc=27.1%2C9.3%2C1.18z&legend=1&cooperativeGestures=1&link=1&geolocation=0&zoomControls=1&scaleBar=1" referrerpolicy="strict-origin-when-cross-origin"></iframe>
             </div>
         </section>
 
@@ -68,18 +79,17 @@
             <div class="border-l-4 border-orange-600 pl-6 mb-8">
                 <h2 class="text-3xl font-bold mb-4">D) Google Analytics Integration</h2>
                 <p class="text-lg text-gray-700 mb-6">
-                    Combining Collections Online visitor numbers with geocoded object locations to analyze whether users view objects made in their own countries or elsewhere.
+                    Combined visitor numbers with geocoded object locations to show whether individuals from different countries viewed objects made in their own countries or elsewhere.
                 </p>
                 <div class="bg-orange-50 p-4 rounded-lg mb-8">
                     <h4 class="font-bold text-orange-800 mb-2">Future Work:</h4>
-                    <p class="text-orange-900 italic text-sm">Enhancing visualizations by integrating real-time information and exploring other monitoring tools.</p>
+                    <p class="text-orange-900 italic text-sm">Integrating real-time information and exploring other monitoring tool visualizations.</p>
                 </div>
             </div>
 
             <div class="mt-6">
                 <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-4">Visualization Output: kepler.gl.png</h3>
-                <img src="kepler.gl.png" alt="Kepler.gl visualization showing visitor data vs object locations" class="experiment-image">
-                <p class="mt-3 text-sm text-gray-500 italic text-center text-pretty">Visual representation of visitor analytics mapped against collection origins.</p>
+                <img src="kepler.gl.png" alt="Kepler.gl visualization" class="experiment-image">
             </div>
         </section>
 
@@ -93,7 +103,6 @@
                 const container = document.getElementById('places-container');
                 container.innerHTML = ''; 
 
-                // Pulling specific fields from the JSON provided
                 data.slice(0, 6).forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'data-card text-sm';
@@ -103,17 +112,15 @@
                         <div class="grid grid-cols-2 gap-1 text-xs">
                             <span class="text-gray-400 font-medium">Coordinates:</span> <span>${item.Latitude}, ${item.Longitude}</span>
                             <span class="text-gray-400 font-medium">Getty ID:</span> <a href="${item.LINK}" target="_blank" class="text-blue-500 hover:underline">${item.TGN_ID2}</a>
-                            <span class="text-gray-400 font-medium">Context:</span> <span>${item['PLACE.BROADER_TEXT']}</span>
                         </div>
                     `;
                     container.appendChild(card);
                 });
             } catch (error) {
-                console.error('Error loading JSON:', error);
+                console.error('Error:', error);
                 document.getElementById('places-container').innerHTML = '<p class="text-red-500">Error loading data sample.</p>';
             }
         }
-
         loadPlaces();
     </script>
 </body>
