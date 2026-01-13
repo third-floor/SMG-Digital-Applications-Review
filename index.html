@@ -120,46 +120,48 @@
 
     <script>
         async function loadPlaces() {
-            try {
-                const response = await fetch('places.json');
-                // Read as text first to clean the invalid NaN tokens
-                let rawText = await response.json(); 
-                
-                // If the fetch fails to parse initially due to NaN, we catch it here:
-                if (!response.ok) throw new Error('Network response was not ok');
-                
-                const text = await response.text();
-                // Regex to replace : NaN with : null
-                const cleanText = text.replace(/:\s*NaN/g, ': null');
-                const data = JSON.parse(cleanText);
-                
-                const container = document.getElementById('places-container');
-                container.innerHTML = ''; 
+    try {
+        const response = await fetch('places.json');
+        
+        if (!response.ok) throw new Error('Network response was not ok');
+        
+        // 1. Read the file as raw text string
+        const text = await response.text();
+        
+        // 2. Globally replace the invalid NaN tokens with null
+        // This handles cases like: "PLACE.PLACE2": NaN,
+        const cleanText = text.replace(/:\s*NaN/g, ': null');
+        
+        // 3. Parse the cleaned string into a JSON object
+        const data = JSON.parse(cleanText);
+        
+        const container = document.getElementById('places-container');
+        container.innerHTML = ''; 
 
-                data.slice(0, 6).forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'data-card text-sm';
-                    // We use the || operator to handle the now 'null' values gracefully
-                    card.innerHTML = `
-                        <p class="font-bold text-indigo-700 text-base">${item['PLACE.PLACE1'] || 'Unknown'}</p>
-                        <p class="text-gray-500 italic mb-2">${item['PLACE.DESCRIPTION'] || 'No description available'}</p>
-                        <div class="grid grid-cols-2 gap-1 text-xs">
-                            <span class="text-gray-400 font-medium">Coordinates:</span> 
-                            <span>${item.Latitude ?? 'N/A'}, ${item.Longitude ?? 'N/A'}</span>
-                            <span class="text-gray-400 font-medium">Getty ID:</span> 
-                            <a href="${item.LINK}" target="_blank" class="text-blue-500 hover:underline">
-                                ${item.TGN_ID2 || 'Link'}
-                            </a>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('places-container').innerHTML = 
-                    `<p class="text-red-500">Error loading data sample: ${error.message}</p>`;
-            }
-        }
+        // 4. Render the data
+        data.slice(0, 6).forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'data-card text-sm';
+            card.innerHTML = `
+                <p class="font-bold text-indigo-700 text-base">${item['PLACE.PLACE1'] || 'Unknown'}</p>
+                <p class="text-gray-500 italic mb-2">${item['PLACE.DESCRIPTION'] || 'No description available'}</p>
+                <div class="grid grid-cols-2 gap-1 text-xs">
+                    <span class="text-gray-400 font-medium">Coordinates:</span> 
+                    <span>${item.Latitude ?? 'N/A'}, ${item.Longitude ?? 'N/A'}</span>
+                    <span class="text-gray-400 font-medium">Getty ID:</span> 
+                    <a href="${item.LINK || '#'}" target="_blank" class="text-blue-500 hover:underline">
+                        ${item.TGN_ID2 || 'View Link'}
+                    </a>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Final Error Catch:', error);
+        document.getElementById('places-container').innerHTML = 
+            `<p class="text-red-500">Error loading data sample: ${error.message}</p>`;
+    }
+}
         loadPlaces();
     </script>
 </body>
